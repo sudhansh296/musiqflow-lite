@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "downloadUrl": "https://portfolio-sand-delta-56anb24ojn.vercel.app/downloads/musiqflow-lite-v1.0.0.apk",
+  "changelog": "🎵 Initial Release\n\n✨ Features:\n• YouTube Music Streaming - Access millions of songs\n• Smart Search - Find songs, artists, and albums instantly\n• Material Design UI - Clean and intuitive interface\n• Fast & Lightweight - Optimized performance (4.3MB)\n• Background Playback - Music continues while multitasking\n• Auto Update System - Always get the latest features\n\n🛠️ Technical:\n• Built with Kotlin & Jetpack Compose\n• ExoPlayer for smooth audio playback\n• Material3 design system\n• Coroutines for async operations\n\n📱 Requirements:\n• Android 8.0+ (API 26)\n• 10MB free storage\n• Internet connection for streaming",
+  "releaseDate": "2024-04-16",
+  "minAndroidVersion": "8.0",
+  "targetSdk": 36,
+  "fileSize": "4.3MB",
+  "features": [
+    "YouTube Music Integration",
+    "Search & Discovery",
+    "Background Playback",
+    "Material Design UI",
+    "Auto Updates",
+    "Lightweight Performance"
+  ],
+  "screenshots": [
+    "/images/musiqflow-screen1.jpg",
+    "/images/musiqflow-screen2.jpg"
+  ]
+}
