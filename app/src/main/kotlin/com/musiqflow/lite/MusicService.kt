@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
+import android.os.PowerManager
 import androidx.annotation.OptIn
 import androidx.core.app.NotificationCompat
 import androidx.media3.common.AudioAttributes
@@ -17,7 +18,6 @@ import androidx.media3.session.MediaSessionService
 import androidx.media3.session.CommandButton
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
-import androidx.media3.session.MediaNotification
 import androidx.media3.session.DefaultMediaNotificationProvider
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
@@ -27,6 +27,7 @@ import com.google.common.util.concurrent.ListenableFuture
 class MusicService : MediaSessionService() {
 
     private var mediaSession: MediaSession? = null
+    private var wakeLock: PowerManager.WakeLock? = null
 
     companion object {
         var onNextRequested: (() -> Unit)? = null
@@ -36,6 +37,13 @@ class MusicService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+
+        // Acquire WakeLock so CPU stays awake when screen is off
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+        wakeLock = powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "MusiqFlow::MusicWakeLock"
+        ).also { it.acquire(12 * 60 * 60 * 1000L) } // max 12 hours
 
         val player = ExoPlayer.Builder(this)
             .setAudioAttributes(
@@ -50,6 +58,15 @@ class MusicService : MediaSessionService() {
             .build()
 
         player.repeatMode = Player.REPEAT_MODE_OFF
+
+        // Listen for track end directly in Service (works even when screen is off)
+        player.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == Player.STATE_ENDED) {
+                    onNextRequested?.invoke()
+                }
+            }
+        })
 
         // Create custom command buttons
         val previousButton = CommandButton.Builder()
@@ -128,6 +145,7 @@ class MusicService : MediaSessionService() {
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo) = mediaSession
 
     override fun onDestroy() {
+        wakeLock?.let { if (it.isHeld) it.release() }
         mediaSession?.run {
             player.release()
             release()

@@ -73,18 +73,13 @@ class MusicViewModel(app: Application) : AndroidViewModel(app) {
                                     statusText.value = "Buffering..." 
                                 }
                                 Player.STATE_ENDED -> {
+                                    // Handled in MusicService directly for screen-off support
                                     statusText.value = "Track ended"
-                                    viewModelScope.launch {
-                                        kotlinx.coroutines.delay(300)
-                                        playNext()
-                                    }
                                 }
                             }
                         }
                         override fun onMediaItemTransition(mediaItem: androidx.media3.common.MediaItem?, reason: Int) {
-                            if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
-                                playNext()
-                            }
+                            // Removed: handled in MusicService to avoid double skip
                         }
                     })
                     startProgressUpdater()
