@@ -27,11 +27,21 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:/aMusic/musiqflow-lite-clean/musiqflow-new-key.jks")
+            storePassword = "musiqflow@123"
+            keyAlias = "musiqflow-lite"
+            keyPassword = "musiqflow@123"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }
@@ -74,11 +84,11 @@ dependencies {
     implementation(project(":innertube"))
 
     // Ktor
-    implementation("io.ktor:ktor-client-core:3.4.1")
-    implementation("io.ktor:ktor-client-okhttp:3.4.1")
-    implementation("io.ktor:ktor-client-content-negotiation:3.4.1")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.1")
-    implementation("io.ktor:ktor-client-encoding:3.4.1")
+    implementation("io.ktor:ktor-client-core:2.3.12")
+    implementation("io.ktor:ktor-client-okhttp:2.3.12")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.12")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
+    implementation("io.ktor:ktor-client-encoding:2.3.12")
 
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("org.brotli:dec:0.1.2")

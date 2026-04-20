@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "MusiqFlowLite"
 include(":app")
 include(":innertube")
-project(":innertube").projectDir = file("../musiqflow-native/innertube")
+project(":innertube").projectDir = file("innertube")
